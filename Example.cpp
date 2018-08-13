@@ -15,25 +15,36 @@ int main(void)
 {
 	/*********** load board image *************/
 	char fname[256];
+	std::string toppath = "../images/";
+	int imageNum = 1;
 	//sprintf(fname, "%sboard0 1.jpg", IMG_PATH);
-	sprintf(fname, "../images/board01.jpg");
-	Mat boardimg = imread(fname, CV_LOAD_IMAGE_GRAYSCALE);
-	if (boardimg.empty())
-		cout << "fail to load image" << endl;
-
-	imshow("input board image", boardimg);
-	
-	/*********** canny edge detection *************/
-
-	Mat cannyimg;
-	Canny(boardimg, cannyimg, 100, 150);
-	imshow("canny edge image", cannyimg);
-
-	/*********** harrison corner detection *************/
-	int gridRows = 7;
-	int gridCols = 5;
-	vector<Point2f> GridPoints = findGridPoints(boardimg, gridRows, gridCols);
+	char key = 0;
+	while(key!='x' && (imageNum > 0 && imageNum <=20))
+	{
+		sprintf(fname, "../images/board%02d.jpg", imageNum);
 		
+		Mat boardimg = imread(fname, CV_LOAD_IMAGE_GRAYSCALE);
+		if (boardimg.empty())
+			cout << "fail to load image" << endl;
+
+		imshow("input board image", boardimg);
+	
+		/*********** canny edge detection *************/
+
+		Mat cannyimg;
+		Canny(boardimg, cannyimg, 100, 150);
+		imshow("canny edge image", cannyimg);
+
+		/*********** harrison corner detection *************/
+		int gridRows = 7;
+		int gridCols = 5;
+		vector<Point2f> GridPoints = findGridPoints(boardimg, gridRows, gridCols);
+		key = waitKey();
+		if (key == 'n')
+			imageNum++;
+		else if (key == 'p')
+			imageNum--;
+	}
 	
 	return 0;
 }
@@ -62,7 +73,7 @@ void harrisCorner(int , void* boardimg)
 }
 
 /** findGridPoints
-* this function extracts grid point using harrison corner detection
+* this function extracts grid point using harris corner detection
 * 
 */
 vector<Point2f> findGridPoints(Mat eimg, const int gridRows, const int gridCols)
@@ -143,7 +154,7 @@ vector<Point2f> findGridPoints(Mat eimg, const int gridRows, const int gridCols)
 		}
 	}
 
-	for (vector<Point2f>::iterator it = CornerPoints.begin(); it != CornerPoints.end(); it++)
+	/*for (vector<Point2f>::iterator it = CornerPoints.begin(); it != CornerPoints.end(); it++)
 	{		
 		if (!visited[idx++])
 			continue;
@@ -171,28 +182,73 @@ vector<Point2f> findGridPoints(Mat eimg, const int gridRows, const int gridCols)
 						avgY += tempPt.y;
 						ptCnt++;
 						visited[nPt] = false;
-
+						nPt++;
 						circle(temp, tempPt, 1, CV_RGB(255, 0, 0));
 						imshow("point test", temp);
 						waitKey();
 					}
 				}
+			}			
+		}
+		avgX /= static_cast<float>(ptCnt);
+		avgY /= static_cast<float>(ptCnt);
+		GridPoints.push_back(Point2f(avgX, avgY));
+	}*/
+
+	for (int i=0; i<CornerPoints.size(); i++)
+	{
+		if (!visited[i])
+			continue;
+
+		Point2f CurrPt = CornerPoints[i];
+		int ptCnt = 0;
+		float avgX = 0;
+		float avgY = 0;
+		temp = cimg.clone();
+		circle(temp, CurrPt, 1, CV_RGB(0, 255, 0));
+
+		int nPt = 0;
+		for (int j=0; j<CornerPoints.size(); j++)
+		{
+
+			Point2f tempPt = CornerPoints[j];
+
+			if (visited[j])
+			{
+				if (tempPt.x > CurrPt.x - ptRange && tempPt.x < CurrPt.x + ptRange)
+				{
+					if (tempPt.y > CurrPt.y - ptRange && tempPt.y < CurrPt.y + ptRange)
+					{
+						avgX += tempPt.x;
+						avgY += tempPt.y;
+						ptCnt++;
+						visited[j] = false;
+					
+						/*circle(temp, tempPt, 1, CV_RGB(255, 0, 0));
+						imshow("point test", temp);
+						waitKey();*/
+					}
+				}
 			}
-			nPt++;
 		}
 		avgX /= static_cast<float>(ptCnt);
 		avgY /= static_cast<float>(ptCnt);
 		GridPoints.push_back(Point2f(avgX, avgY));
 	}
+
 	cout << "Grid points : " << GridPoints.size() << endl;
-	temp = boardimg.clone();
+	temp = cimg.clone();
+	int cnt = 0;
 	for (vector<Point2f>::iterator it = GridPoints.begin(); it != GridPoints.end(); it++)
 	{
 		Point2f pt = *it;
-		circle(temp, pt, 1, CV_RGB(255, 255, 255), 3);
+		circle(temp, pt, 1, CV_RGB(0, 255, 0), 3);
+		/*imshow("grid point test", temp);
+		cout << cnt++ << "Points" << endl;
+		waitKey();*/
 	}
 	imshow("Merging grid points test", temp);
-	waitKey();
+	//waitKey();
 
 	return GridPoints;
 }
