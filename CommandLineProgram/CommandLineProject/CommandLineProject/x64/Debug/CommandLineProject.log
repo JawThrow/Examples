@@ -1,6 +1,2 @@
-﻿  CreateThread.cpp
-c:\users\jawpij\documents\visual studio 2015\projects\doodle\commandlineproject\commandlineproject\createthread.cpp(9): warning C4311: '형식 캐스팅': 'LPVOID'에서 'DWORD'(으)로 포인터가 잘립니다.
-c:\users\jawpij\documents\visual studio 2015\projects\doodle\commandlineproject\commandlineproject\createthread.cpp(9): warning C4302: '형식 캐스팅': 'LPVOID'에서 'DWORD'(으)로 잘립니다.
-c:\users\jawpij\documents\visual studio 2015\projects\doodle\commandlineproject\commandlineproject\createthread.cpp(30): warning C4312: '형식 캐스팅': 'DWORD'에서 더 큰 'LPVOID'(으)로의 변환입니다.
-  CommandLineProject.vcxproj -> C:\Users\JawPIJ\Documents\Visual Studio 2015\Projects\Doodle\CommandLineProject\x64\Debug\CreateThread.exe
-  CommandLineProject.vcxproj -> C:\Users\JawPIJ\Documents\Visual Studio 2015\Projects\Doodle\CommandLineProject\x64\Debug\CreateThread.pdb (Full PDB)
+﻿  ThreadAdderOne.cpp
+  CommandLineProject.vcxproj -> C:\Users\임재\Documents\Visual Studio 2015\Projects\Exmaples\Examples\CommandLineProgram\CommandLineProject\x64\Debug\ThreadAdderOne.exe
