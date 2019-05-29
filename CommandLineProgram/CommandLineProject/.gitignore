@@ -1,0 +1,9 @@
+*.ilk
+*.pdb
+*.opendb
+*.obj
+*.tlog
+*.log
+*.vcxproj
+*.db
+*.filters
