@@ -1,0 +1,10 @@
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\bin\Debug\WrapCSTest.exe.config
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\bin\Debug\WrapCSTest.exe
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\bin\Debug\WrapCSTest.pdb
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\bin\Debug\WrappedClass.dll
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\bin\Debug\WrappedClass.pdb
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\obj\Debug\WrapCSTest.csprojAssemblyReference.cache
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\obj\Debug\WrapCSTest.csproj.CoreCompileInputs.cache
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\obj\Debug\WrapCSTest.csproj.CopyComplete
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\obj\Debug\WrapCSTest.exe
+C:\Users\JawPIJ\source\repos\WrapNativeClass\WrapCSTest\obj\Debug\WrapCSTest.pdb
