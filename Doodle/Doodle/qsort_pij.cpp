@@ -4,16 +4,20 @@
 #include "pch.h"
 #include <iostream>
 
+#define LEN  5
 void swap_pij(int*arr, int i, int j);
 void qsort_pij(int* arr, int left, int right);
 
 int main()
 {
-	int arr[10] = { 10, 6, 7, 9, 3, 4, 2, 1, 5, 8 };
-	for (int idx = 0; idx < 10; idx++)
+	int arr[LEN] = { 2, 3, 4,2 ,3};
+	for (int idx = 0; idx < LEN; idx++)
 		printf("%d ", arr[idx]);
 	printf("\n");
-	qsort_pij(arr, 0, 9);
+	qsort_pij(arr, 0,LEN-1);
+	for (int idx = 0; idx < LEN; idx++)
+		printf("%d ", arr[idx]);
+	printf("\n");
 }
 
 
@@ -27,7 +31,31 @@ void swap_pij(int*arr, int i, int j)
 
 void qsort_pij(int* arr, int left, int right)
 {
-	if (left > right)
+	if (left >= right)
+		return;
+
+	int pivot = left;
+	int i = left + 1;
+	int j = right;
+
+	while(i<=j)
+	{
+		while (i <= right && arr[i] <= arr[pivot])
+			i++;
+		while (j > left && arr[j] >= arr[pivot])
+			j--;
+
+		if (i > j)			
+			swap_pij(arr, pivot, j);
+		else
+			swap_pij(arr, i, j);
+	}
+
+	qsort_pij(arr, left, j - 1);
+	qsort_pij(arr, j + 1, right);
+	
+
+	/*if (left > right)
 		return;
 
 	int pivot = left;
@@ -43,12 +71,8 @@ void qsort_pij(int* arr, int left, int right)
 		swap_pij(arr, i, j);
 	else
 		swap_pij(arr, pivot, j);
-	
-	for (int idx = 0; idx < 10; idx++)
-		printf("%d ", arr[idx]);
-	printf("\n");
-	
+
 	qsort_pij(arr, left, j - 1);
-	qsort_pij(arr, j + 1, right);
+	qsort_pij(arr, j + 1, right);*/
 	return;
 }
