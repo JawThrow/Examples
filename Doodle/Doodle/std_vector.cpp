@@ -23,6 +23,13 @@ int main(void)
 	//vector_copy();
 	int arr[5] = { 1,2,3,4,5 };
 	int arr2[5] = { 0, };
+
+	printf("%p\n", arr);
+	printf("%p\n", &arr);
+	printf("%p\n", &*arr);
+	printf("%d\n", *&arr);
+	printf("%p\n", &*(arr+0));
+
 	memcpy(arr2, arr, sizeof(int) * 3);
 	for (int i = 0; i < 5; i++)
 		cout << arr2[i] << " ";
