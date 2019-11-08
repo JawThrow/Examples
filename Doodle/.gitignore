@@ -1,0 +1,6 @@
+*.opendf
+*.db
+*.tlog
+*.ipch
+*.idb
+*.pdb
