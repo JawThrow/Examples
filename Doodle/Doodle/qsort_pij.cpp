@@ -1,78 +1,59 @@
-﻿// Doodle.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
-//
+﻿#include <stdio.h>
 
-#include "pch.h"
-#include <iostream>
-
-#define LEN  5
-void swap_pij(int*arr, int i, int j);
-void qsort_pij(int* arr, int left, int right);
-
-int main()
+void print_array(int A[], int N)
 {
-	int arr[LEN] = { 2, 3, 4,2 ,3};
-	for (int idx = 0; idx < LEN; idx++)
-		printf("%d ", arr[idx]);
-	printf("\n");
-	qsort_pij(arr, 0,LEN-1);
-	for (int idx = 0; idx < LEN; idx++)
-		printf("%d ", arr[idx]);
-	printf("\n");
+    for(int i=0; i<N; i++)
+    {
+        printf("%3d", A[i]);
+    }
+    printf("\n");
+}
+
+void swap(int A[], int l, int r)
+{
+    int temp = A[l];
+    A[l] = A[r];
+    A[r] = temp;
+}
+
+void quick_sort(int A[], int l, int r)
+{
+    if(l >= r)
+        return;
+
+    int start = l;
+    int end = r;
+    int pivot_idx = (l+r)/2;
+    int pivot = A[pivot_idx];
+    while(l < r)
+    {
+        while(A[l] < pivot && l < end)
+            l++;
+        while(A[r] > pivot && r > start)
+            r--;        
+        swap(A, l, r);                
+        l++;
+        r--;
+    }
+
+    quick_sort(A, start, l-1);
+    quick_sort(A, l, end);
 }
 
 
-void swap_pij(int*arr, int i, int j)
+void sort(int A[], int N)
 {
-	int temp = 0;
-	temp = arr[i];
-	arr[i] = arr[j];
-	arr[j] = temp;
+    int start = 0;
+    int end = N;
+    
+    quick_sort(A, start, end-1);
 }
 
-void qsort_pij(int* arr, int left, int right)
+int main(void)
 {
-	if (left >= right)
-		return;
+    int A[5] = {1,1,1,1,1};
+    int N = sizeof(A)/sizeof(int);
+    sort(A, N);    
 
-	int pivot = left;
-	int i = left + 1;
-	int j = right;
-
-	while(i<=j)
-	{
-		while (i <= right && arr[i] <= arr[pivot])
-			i++;
-		while (j > left && arr[j] >= arr[pivot])
-			j--;
-
-		if (i > j)			
-			swap_pij(arr, pivot, j);
-		else
-			swap_pij(arr, i, j);
-	}
-
-	qsort_pij(arr, left, j - 1);
-	qsort_pij(arr, j + 1, right);
-	
-
-	/*if (left > right)
-		return;
-
-	int pivot = left;
-	int i = left + 1;
-	int j = right;
-
-	while (i <= j && arr[i] <= arr[pivot])
-		i++;
-	while (j >= i && arr[j] >= arr[pivot])
-		j--;
-
-	if (i <= j)
-		swap_pij(arr, i, j);
-	else
-		swap_pij(arr, pivot, j);
-
-	qsort_pij(arr, left, j - 1);
-	qsort_pij(arr, j + 1, right);*/
-	return;
+    return 0;
 }
