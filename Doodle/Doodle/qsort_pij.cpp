@@ -18,26 +18,31 @@ void swap(int A[], int l, int r)
 
 void quick_sort(int A[], int l, int r)
 {
-    if(l >= r)
+    if(start >= end)
         return;
 
-    int start = l;
-    int end = r;
-    int pivot_idx = (l+r)/2;
+    int pivot_idx = start;
     int pivot = A[pivot_idx];
-    while(l < r)
+    int l = start+1;
+    int r = end;
+    while(l <= r)
     {
-        while(A[l] < pivot && l < end)
+        while(A[l] < pivot && l <= r)
             l++;
-        while(A[r] > pivot && r > start)
-            r--;        
-        swap(A, l, r);                
-        l++;
-        r--;
+        while(A[r] > pivot && r >= l)
+            r--;
+        
+        if (l < r)
+        {
+            swap(A, l, r);
+            l++;
+            r--;
+        }
     }
 
-    quick_sort(A, start, l-1);
-    quick_sort(A, l, end);
+    swap(A, pivot_idx, r);
+    quick_sort(A, start, pivot_idx-1);
+    quick_sort(A, pivot_idx+1, end);
 }
 
 
@@ -51,7 +56,7 @@ void sort(int A[], int N)
 
 int main(void)
 {
-    int A[5] = {1,1,1,1,1};
+    int A[5] = {1,3,4,1,3};
     int N = sizeof(A)/sizeof(int);
     sort(A, N);    
 
