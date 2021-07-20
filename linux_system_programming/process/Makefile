@@ -2,7 +2,7 @@
 
 SRCS = $(wildcard *.c)
 PROGS = $(patsubst %.c,%,$(SRCS))
-CFLAGS = -Wall -Werror
+CFLAGS = -Wall -Werror -pthread
 
 all: $(PROGS)
 
