@@ -2,11 +2,11 @@
 
 SRCS = $(wildcard *.c)
 PROGS = $(patsubst %.c,%,$(SRCS))
-CFLAGS = -Wall -Werror -pthread
+CFLAGS = -Wall -pthread
 
 all: $(PROGS)
 
 %: %.c
-		$(CC) $(CFLAGS) -o $@ $<
+		$(CC) -g $(CFLAGS) -o $@ $<
 clean:
 		rm -f $(PROGS)
