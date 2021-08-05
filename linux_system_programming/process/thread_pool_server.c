@@ -55,12 +55,12 @@ add_request(int request_num,
     /* add new request to the end of the list, updating list */
     /* pointers as required */
     if (num_requests == 0) { /* special case - list is empty */
-	requests = a_request;
-	last_request = a_request;
+        requests = a_request;
+        last_request = a_request;
     }
     else {
-	last_request->next = a_request;
-	last_request = a_request;
+        last_request->next = a_request;
+        last_request = a_request;
     }
 
     /* increase total number of pending requests by one. */
