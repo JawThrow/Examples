@@ -37,14 +37,14 @@ add_request(int request_num,
 	    pthread_mutex_t* p_mutex,
 	    pthread_cond_t*  p_cond_var)
 {
-    int rc;	                    /* return code of pthreads functions.  */
+    int rc = 0;	                    /* return code of pthreads functions.  */
     struct request* a_request;      /* pointer to newly added request.     */
 
     /* create structure with new request */
     a_request = (struct request*)malloc(sizeof(struct request));
     if (!a_request) { /* malloc failed?? */
-	fprintf(stderr, "add_request: out of memory\n");
-	exit(1);
+        fprintf(stderr, "add_request: out of memory\n");
+        exit(1);
     }
     a_request->number = request_num;
     a_request->next = NULL;
@@ -87,26 +87,25 @@ add_request(int request_num,
  * output:    pointer to the removed request, or NULL if none.
  * memory:    the returned request need to be freed by the caller.
  */
-struct request*
-get_request(pthread_mutex_t* p_mutex)
+struct request* get_request(pthread_mutex_t* p_mutex)
 {
-    int rc;	                    /* return code of pthreads functions.  */
+    int rc = 0;	                    /* return code of pthreads functions.  */
     struct request* a_request;      /* pointer to request.                 */
 
     /* lock the mutex, to assure exclusive access to the list */
     rc = pthread_mutex_lock(p_mutex);
 
     if (num_requests > 0) {
-	a_request = requests;
-	requests = a_request->next;
-	if (requests == NULL) { /* this was the last request on the list */
-	    last_request = NULL;
-	}
-	/* decrease the total number of pending requests */
-	num_requests--;
+        a_request = requests;
+        requests = a_request->next;
+        if (requests == NULL) { /* this was the last request on the list */
+            last_request = NULL;
+        }
+        /* decrease the total number of pending requests */
+	    num_requests--;
     }
     else { /* requests list is empty */
-	a_request = NULL;
+	    a_request = NULL;
     }
 
     /* unlock mutex */
@@ -123,13 +122,12 @@ get_request(pthread_mutex_t* p_mutex)
  * input:     request pointer, id of calling thread.
  * output:    none.
  */
-void
-handle_request(struct request* a_request, int thread_id)
+void handle_request(struct request* a_request, int thread_id)
 {
     if (a_request) {
-	printf("Thread '%d' handled request '%d'\n",
-	       thread_id, a_request->number);
-	fflush(stdout);
+        printf("Thread '%d' handled request '%d'\n",
+            thread_id, a_request->number);
+        fflush(stdout);
     }
 }
 
@@ -142,10 +140,9 @@ handle_request(struct request* a_request, int thread_id)
  * input:     id of thread, for printing purposes.
  * output:    none.
  */
-void*
-handle_requests_loop(void* data)
+void* handle_requests_loop(void* data)
 {
-    int rc;	                    /* return code of pthreads functions.  */
+    int rc = 0;	                    /* return code of pthreads functions.  */
     struct request* a_request;      /* pointer to a request.               */
     int thread_id = *((int*)data);  /* thread identifying number           */
 
@@ -168,35 +165,34 @@ handle_requests_loop(void* data)
     	printf("thread '%d', num_requests =  %d\n", thread_id, num_requests);
     	fflush(stdout);
 #endif /* DEBUG */
-	if (num_requests > 0) { /* a request is pending */
-	    a_request = get_request(&request_mutex);
-	    if (a_request) { /* got a request - handle it and free it */
-		handle_request(a_request, thread_id);
-		free(a_request);
-	    }
-	}
-	else {
-	    /* wait for a request to arrive. note the mutex will be */
-	    /* unlocked here, thus allowing other threads access to */
-	    /* requests list.                                       */
-#ifdef DEBUG
-    	    printf("thread '%d' before pthread_cond_wait\n", thread_id);
-    	    fflush(stdout);
-#endif /* DEBUG */
-	    rc = pthread_cond_wait(&got_request, &request_mutex);
-	    /* and after we return from pthread_cond_wait, the mutex  */
-	    /* is locked again, so we don't need to lock it ourselves */
-#ifdef DEBUG
-    	    printf("thread '%d' after pthread_cond_wait\n", thread_id);
-    	    fflush(stdout);
-#endif /* DEBUG */
-	}
+        if (num_requests > 0) { /* a request is pending */
+            a_request = get_request(&request_mutex);
+            if (a_request) { /* got a request - handle it and free it */
+                handle_request(a_request, thread_id);
+                free(a_request);
+            }
+        }
+        else {
+            /* wait for a request to arrive. note the mutex will be */
+            /* unlocked here, thus allowing other threads access to */
+            /* requests list.                                       */
+    #ifdef DEBUG
+                printf("thread '%d' before pthread_cond_wait\n", thread_id);
+                fflush(stdout);
+    #endif /* DEBUG */
+            rc = pthread_cond_wait(&got_request, &request_mutex);
+            /* and after we return from pthread_cond_wait, the mutex  */
+            /* is locked again, so we don't need to lock it ourselves */
+    #ifdef DEBUG
+                printf("thread '%d' after pthread_cond_wait\n", thread_id);
+                fflush(stdout);
+    #endif /* DEBUG */
+        }
     }
 }
 
 /* like any C program, program's execution begins in main */
-int
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     int        i;                                /* loop counter          */
     int        thr_id[NUM_HANDLER_THREADS];      /* thread IDs            */
@@ -205,20 +201,20 @@ main(int argc, char* argv[])
 
     /* create the request-handling threads */
     for (i=0; i<NUM_HANDLER_THREADS; i++) {
-	thr_id[i] = i;
-	pthread_create(&p_threads[i], NULL, handle_requests_loop, (void*)&thr_id[i]);
+        thr_id[i] = i;
+        pthread_create(&p_threads[i], NULL, handle_requests_loop, (void*)&thr_id[i]);
     }
     sleep(3);
     /* run a loop that generates requests */
     for (i=0; i<600; i++) {
-	add_request(i, &request_mutex, &got_request);
-	/* pause execution for a little bit, to allow      */
-	/* other threads to run and handle some requests.  */
-	if (rand() > 3*(RAND_MAX/4)) { /* this is done about 25% of the time */
-	    delay.tv_sec = 0;
-	    delay.tv_nsec = 10;
-	    nanosleep(&delay, NULL);
-	}
+        add_request(i, &request_mutex, &got_request);
+        /* pause execution for a little bit, to allow      */
+        /* other threads to run and handle some requests.  */
+        if (rand() > 3*(RAND_MAX/4)) { /* this is done about 25% of the time */
+            delay.tv_sec = 0;
+            delay.tv_nsec = 10;
+            nanosleep(&delay, NULL);
+        }
     }
     /* now wait till there are no more requests to process */
     sleep(5);
